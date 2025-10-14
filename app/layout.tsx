@@ -24,6 +24,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import { getCookie, setCookie } from "cookies-next";  // إضافة للكوكيز
 import "./globals.css";
+import { easeOut } from "framer-motion";
 
 // 🖼️ استيراد الصور من public
 import logo from "@/./public/logo.svg"; 
@@ -167,16 +168,16 @@ export function Footer({ lang }: { lang: "ar" | "en" }) {
 export function FloatingLogo({ lang }: { lang: "ar" | "en" }) {
   const [open, setOpen] = useState(false);
 
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20, scale: 0.9 },
-    visible: (i: number) => ({
-      opacity: 1,
-      y: 0,
-      scale: 1,
-      transition: { delay: i * 0.08, duration: 0.4, ease: "easeOut" },
-    }),
-    exit: { opacity: 0, y: 20, scale: 0.9, transition: { duration: 0.2 } },
-  };
+ const itemVariants = {
+  hidden: { opacity: 0, y: 20, scale: 0.9 },
+  visible: (custom: number) => ({
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: { delay: custom * 0.08, duration: 0.4, ease: easeOut },
+  }),
+  exit: { opacity: 0, y: 20, scale: 0.9, transition: { duration: 0.2 } },
+};
 
   return (
     <div className="fixed bottom-6 right-6 z-60">
@@ -250,14 +251,15 @@ export function FloatingLogo({ lang }: { lang: "ar" | "en" }) {
                     { href: "https://wa.me/966500000000", src: iconWhatsapp, alt: "WhatsApp" },
                   ].map((icon, i) => (
                     <motion.a
-                      key={`icon-${i}-${lang}`}  // key فريد لكل icon
-                      href={icon.href}
-                      target={icon.href.startsWith("http") ? "_blank" : undefined}
-                      rel="noreferrer"
-                      custom={i}
-                      variants={itemVariants}
-                      className="transition hover:-translate-y-1"
-                    >
+  key={`icon-${i}-${lang}`}
+  href={icon.href}
+  target={icon.href.startsWith("http") ? "_blank" : undefined}
+  rel="noreferrer"
+  custom={i} // ← هذا ضروري
+  variants={itemVariants}
+  className="transition hover:-translate-y-1"
+>
+
                       <Image
                         src={icon.src}
                         alt={icon.alt}
