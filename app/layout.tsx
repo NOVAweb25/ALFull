@@ -284,34 +284,37 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   const [lang, setLang] = useState<"ar" | "en">("ar");
 
   // useEffect الأول: للـ script و الكوكيز (مرة واحدة فقط، بدون loop)
-  useEffect(() => {
-    // تحميل سكريبت Google Translate إذا ما كان محمل
-    if (!(window as any).googleTranslateElementInit) {
-  const addScript = document.createElement("script");
-  addScript.src = "//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit";
-  document.body.appendChild(addScript);
-  (window as any).googleTranslateElementInit = () => {
-    new (window as any).google.translate.TranslateElement(
-      {
-        pageLanguage: "ar",
-        includedLanguages: "ar,en",
-        layout: (window as any).google.translate.TranslateElement.InlineLayout.SIMPLE,
-      },
-      "google_translate_element"
-    );
-  };
-}
+ useEffect(() => {
+  // تحميل سكريبت Google Translate إذا ما كان محمل
+  if (!(window as any).googleTranslateElementInit) {
+    const addScript = document.createElement("script");
+    addScript.src = "//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit";
+    document.body.appendChild(addScript);
+    (window as any).googleTranslateElementInit = () => {
+      new (window as any).google.translate.TranslateElement(
+        {
+          pageLanguage: "ar",
+          includedLanguages: "ar,en",
+          layout: (window as any).google.translate.TranslateElement.InlineLayout.SIMPLE,
+        },
+        "google_translate_element"
+      );
+    };
+  }
 
 
     // تحديد اللغة من الكوكيز عند التحميل (مرة واحدة)
-    const googtrans = getCookie("googtrans");
-    if (googtrans && googtrans.includes("en")) {
-      setLang("en");
-    } else {
-      setLang("ar");
-    }
-  }, []);  // dependency فارغة: يشتغل مرة واحدة فقط
-
+   const cookieValue = getCookie("googtrans");
+  let googtrans = "";
+  if (typeof cookieValue === "string") {
+    googtrans = cookieValue;
+  }
+  if (googtrans.includes("en")) {
+    setLang("en");
+  } else {
+    setLang("ar");
+  }
+}, []);
   // useEffect الثاني: للـ direction فقط (بدون setLang)
   useEffect(() => {
     // set direction when lang changes
