@@ -286,21 +286,22 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   // useEffect الأول: للـ script و الكوكيز (مرة واحدة فقط، بدون loop)
   useEffect(() => {
     // تحميل سكريبت Google Translate إذا ما كان محمل
-    if (!window.googleTranslateElementInit) {
-      const addScript = document.createElement("script");
-      addScript.src = "//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit";
-      document.body.appendChild(addScript);
-      window.googleTranslateElementInit = () => {
-        new (window as any).google.translate.TranslateElement(
-          {
-            pageLanguage: "ar",  // اللغة الأصلية عربي
-            includedLanguages: "ar,en",  // دعم عربي وإنجليزي فقط
-            layout: (window as any).google.translate.TranslateElement.InlineLayout.SIMPLE,
-          },
-          "google_translate_element"
-        );
-      };
-    }
+    if (!(window as any).googleTranslateElementInit) {
+  const addScript = document.createElement("script");
+  addScript.src = "//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit";
+  document.body.appendChild(addScript);
+  (window as any).googleTranslateElementInit = () => {
+    new (window as any).google.translate.TranslateElement(
+      {
+        pageLanguage: "ar",
+        includedLanguages: "ar,en",
+        layout: (window as any).google.translate.TranslateElement.InlineLayout.SIMPLE,
+      },
+      "google_translate_element"
+    );
+  };
+}
+
 
     // تحديد اللغة من الكوكيز عند التحميل (مرة واحدة)
     const googtrans = getCookie("googtrans");
