@@ -19,8 +19,139 @@
   }
 }
 
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ✨ إعدادات الخط والخلفية العامة */
+html,
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  @apply bg-[#121921] text-white font-sans scroll-smooth;
+  font-family: 'Poppins', 'Segoe UI', sans-serif;
+}
+
+/* 💫 تحسين مظهر التمرير */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #1e3a5f;
+}
+::-webkit-scrollbar-thumb {
+  background: #fdb81c;
+  border-radius: 10px;
+}
+
+/* ✨ ألوان متكررة */
+:root {
+  --color-bg: #121921;
+  --color-primary: #fdb81c;
+  --color-red: #c8202f;
+  --color-blue: #1e3a5f;
+  --color-yellow: #ffd166;
+  --color-wine: #8b1e3f;
+}
+
+/* ✨ عناصر عامة */
+.section {
+  @apply py-20 px-6 md:px-16;
+}
+
+.section-title {
+  @apply text-3xl md:text-4xl font-bold text-[#fdb81c] mb-8 tracking-wide;
+}
+
+/* 🟡 زر ذهبي أنيق */
+.btn-primary {
+  @apply bg-[#fdb81c] text-[#121921] font-semibold px-6 py-3 rounded-full shadow-lg transition-all duration-300 hover:bg-[#ffd166] hover:scale-105;
+}
+
+/* 🔵 زر أزرق ثانوي */
+.btn-secondary {
+  @apply bg-[#1e3a5f] text-white font-medium px-6 py-3 rounded-full transition-all duration-300 hover:bg-[#8b1e3f] hover:scale-105;
+}
+
+/* 🟣 تأثير الفيد (fade in) العام للعناصر */
+.fade-in {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeInUp 1s ease-out forwards;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scaleUp {
+  0% {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.animate-scaleUp {
+  animation: scaleUp 0.3s ease-out forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fadeOut {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+@keyframes scaleUp {
+  0% {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.animate-scaleUp {
+  animation: scaleUp 0.3s ease-out forwards;
+}
+
+
+/* ✨ تدرجات حديثة للخلفيات */
+.bg-gradient-main {
+  background: linear-gradient(135deg, #121921 40%, #1e3a5f 100%);
+}
+
+.bg-gradient-highlight {
+  background: linear-gradient(135deg, #fdb81c, #ffd166);
+}
+
+/* ✨ خطوط زينة */
+h1, h2, h3, h4 {
+  @apply tracking-wide;
+}
+
+/* ✨ خطوط متدرجة اللون */
+.text-gradient {
+  background: linear-gradient(90deg, #fdb81c, #ffd166);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* ✨ حدود ذهبية متدرجة للبطاقات */
+.border-gradient-gold {
+  border-image: linear-gradient(90deg, #fdb81c, #ffd166) 1;
 }
