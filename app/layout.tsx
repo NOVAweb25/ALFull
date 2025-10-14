@@ -1,36 +1,19 @@
-/*
-  File: Next_app_layout_and_components.tsx
-  Purpose: A single-file React + Tailwind implementation you can split into app/layout.tsx and components.
-  Instructions:
-    - Install dependencies: framer-motion (npm i framer-motion) + cookies-next (npm i cookies-next)
-    - This file contains: RootLayout (use as app/layout.tsx), Navbar, Footer, FloatingLogo
-    - It reads colors from your globals.css (we use Tailwind classes and CSS variables defined there)
-    - Place your Splash page at app/page.tsx (you already did)
-    - The Home pages live in app/home/*.tsx as you planned.
-
-  Notes about Next.js app router:
-    - app/layout.tsx normally is a Server Component; for interactive navbar and floating logo we mark it as a Client Component with "use client".
-    - If you prefer to keep layout server, extract Navbar, FloatingLogo into client components and import them.
-  */
-
-//app/layout.tsx
-
+// app/layout.tsx
 "use client";
 
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, easeOut } from "framer-motion";
 import Image from "next/image";
-import { getCookie, setCookie } from "cookies-next";  // إضافة للكوكيز
+import { getCookie, setCookie } from "cookies-next";
 import "./globals.css";
-import { easeOut } from "framer-motion";
 
 // 🖼️ استيراد الصور من public
-import logo from "@/./public/logo.svg"; 
-import iconMail from "@/./public/mail.svg"; 
-import iconPhone from "@/./public/phone.svg"; 
-import iconWhatsapp from "@/./public/whatsapp.svg"; 
+import logo from "@/./public/logo.svg";
+import iconMail from "@/./public/mail.svg";
+import iconPhone from "@/./public/phone.svg";
+import iconWhatsapp from "@/./public/whatsapp.svg";
 
 // -----------------------------
 // Helper: navigation labels (AR + EN)
@@ -52,7 +35,7 @@ export function Navbar({ lang, setLang }: { lang: "ar" | "en"; setLang: (l: "ar"
   return (
     <header className="fixed inset-x-0 top-0 z-50 backdrop-blur-lg bg-[rgba(30,58,95,0.25)] border-b border-[rgba(255,255,255,0.08)] shadow-[0_4px_20px_rgba(0,0,0,0.25)]">
       <nav className={`max-w-7xl mx-auto px-6 md:px-10 h-20 flex items-center justify-between ${isRTL ? 'flex-row-reverse' : ''}`}>
-        {/* Right side (for AR) - navigation links */}
+        {/* Right side - navigation links */}
         <div className="flex items-center gap-6">
           <ul className="hidden md:flex items-center gap-6">
             {NAV_ITEMS.map((item) => (
@@ -74,7 +57,7 @@ export function Navbar({ lang, setLang }: { lang: "ar" | "en"; setLang: (l: "ar"
         {/* Center: Logo */}
         <div className="flex-1 flex items-center justify-center pointer-events-none md:pointer-events-auto">
           <motion.div 
-            key={`logo-${lang}`}  // key أكثر تحديدًا لتجنب re-mount
+            key={`logo-${lang}`}  
             initial={{ opacity: 0, scale: 0.85 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.9, ease: "easeOut" }}
@@ -94,16 +77,15 @@ export function Navbar({ lang, setLang }: { lang: "ar" | "en"; setLang: (l: "ar"
           </motion.div>
         </div>
 
-        {/* Left side (for AR) - language toggle */}
+        {/* Left side - language toggle */}
         <div className="flex items-center gap-4">
           <button
             aria-label="toggle-language"
             onClick={() => {
               const newLang = lang === "ar" ? "en" : "ar";
               const googtrans = newLang === "ar" ? "/auto/ar" : "/auto/en";
-              setCookie("googtrans", googtrans, { maxAge: 60 * 60 * 24 * 365 });  // حفظ لسنة
+              setCookie("googtrans", googtrans, { maxAge: 60 * 60 * 24 * 365 });  
               setLang(newLang);
-              // تأخير بسيط قبل reload عشان الـ setLang يطبق (اختياري، بس يقلل الأخطاء)
               setTimeout(() => window.location.reload(), 50);
             }}
             className="px-3 py-1 rounded-full border border-white/6 bg-[rgba(255,255,255,0.02)] text-white/80 hover:bg-[rgba(255,255,255,0.04)] transition"
@@ -124,7 +106,6 @@ export function Footer({ lang }: { lang: "ar" | "en" }) {
   return (
     <footer className="mt-24 backdrop-blur-lg bg-[rgba(30,58,95,0.25)] text-white/90 border-t border-[rgba(253,184,28,0.12)] shadow-[0_4px_20px_rgba(0,0,0,0.25)]">
       <div className="max-w-7xl mx-auto px-6 md:px-10 py-10 grid grid-cols-1 md:grid-cols-2 gap-8">
-        {/* Left column: links */}
         <div className={`${isRTL ? 'text-left' : 'text-left'}`}>
           <h4 className="text-lg font-semibold mb-4">{lang === 'ar' ? 'روابط تهمك' : 'Useful Links'}</h4>
           <ul className="flex flex-col gap-3 text-sm">
@@ -146,7 +127,6 @@ export function Footer({ lang }: { lang: "ar" | "en" }) {
           </ul>
         </div>
 
-        {/* Right column: logo + about + tax */}
         <div className="flex flex-col items-center md:items-end md:text-right">
           <Image
             src={logo}
@@ -163,34 +143,33 @@ export function Footer({ lang }: { lang: "ar" | "en" }) {
 }
 
 // -----------------------------
-// FloatingLogo Component (modern with animation like AlAjlanInvest)
+// FloatingLogo Component
 // -----------------------------
 export function FloatingLogo({ lang }: { lang: "ar" | "en" }) {
   const [open, setOpen] = useState(false);
 
- const itemVariants = {
-  hidden: { opacity: 0, y: 20, scale: 0.9 },
-  visible: (custom: number) => ({
-    opacity: 1,
-    y: 0,
-    scale: 1,
-    transition: { delay: custom * 0.08, duration: 0.4, ease: easeOut },
-  }),
-  exit: { opacity: 0, y: 20, scale: 0.9, transition: { duration: 0.2 } },
-};
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20, scale: 0.9 },
+    visible: (custom: number) => ({
+      opacity: 1,
+      y: 0,
+      scale: 1,
+      transition: { delay: custom * 0.08, duration: 0.4, ease: easeOut },
+    }),
+    exit: { opacity: 0, y: 20, scale: 0.9, transition: { duration: 0.2 } },
+  };
 
   return (
     <div className="fixed bottom-6 right-6 z-60">
       <AnimatePresence>
         <motion.div 
-          key={`float-${lang}`}  // key أكثر تحديدًا
+          key={`float-${lang}`} 
           layout
           initial={{ opacity: 0, y: 25 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: 25 }}
         >
           <div className="relative flex flex-col items-center">
-            {/* الزر الرئيسي */}
             <button
               onClick={() => setOpen(!open)}
               aria-label="floating-logo"
@@ -198,17 +177,15 @@ export function FloatingLogo({ lang }: { lang: "ar" | "en" }) {
                 open ? "rotate-45" : ""
               }`}
             >
-              {/* دائرة خلفية بتأثير الزجاج وظل */}
               <span
                 className="absolute inset-0 rounded-full shadow-lg"
                 style={{
-                  background: "rgba(255, 209, 102, 0.25)", // اللون مع شفافية
+                  background: "rgba(255, 209, 102, 0.25)",
                   backdropFilter: "blur(8px)",
                   WebkitBackdropFilter: "blur(8px)",
                 }}
               ></span>
 
-              {/* الشعار بدون خلفية */}
               {!open ? (
                 <Image
                   src={logo}
@@ -235,11 +212,10 @@ export function FloatingLogo({ lang }: { lang: "ar" | "en" }) {
               )}
             </button>
 
-            {/* أيقونات التواصل */}
-            <AnimatePresence mode="wait">  {/* إضافة mode="wait" لمنع تداخل الـ exit/enter */}
+            <AnimatePresence mode="wait">
               {open && (
                 <motion.div 
-                  key={`social-${lang}`}  // key للداخلية كمان
+                  key={`social-${lang}`} 
                   initial="hidden"
                   animate="visible"
                   exit="exit"
@@ -251,15 +227,14 @@ export function FloatingLogo({ lang }: { lang: "ar" | "en" }) {
                     { href: "https://wa.me/966500000000", src: iconWhatsapp, alt: "WhatsApp" },
                   ].map((icon, i) => (
                     <motion.a
-  key={`icon-${i}-${lang}`}
-  href={icon.href}
-  target={icon.href.startsWith("http") ? "_blank" : undefined}
-  rel="noreferrer"
-  custom={i} // ← هذا ضروري
-  variants={itemVariants}
-  className="transition hover:-translate-y-1"
->
-
+                      key={`icon-${i}-${lang}`}
+                      href={icon.href}
+                      target={icon.href.startsWith("http") ? "_blank" : undefined}
+                      rel="noreferrer"
+                      custom={i}
+                      variants={itemVariants}
+                      className="transition hover:-translate-y-1"
+                    >
                       <Image
                         src={icon.src}
                         alt={icon.alt}
@@ -283,41 +258,33 @@ export function FloatingLogo({ lang }: { lang: "ar" | "en" }) {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   const [lang, setLang] = useState<"ar" | "en">("ar");
 
-  // useEffect الأول: للـ script و الكوكيز (مرة واحدة فقط، بدون loop)
- useEffect(() => {
-  // تحميل سكريبت Google Translate إذا ما كان محمل
-  if (!(window as any).googleTranslateElementInit) {
-    const addScript = document.createElement("script");
-    addScript.src = "//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit";
-    document.body.appendChild(addScript);
-    (window as any).googleTranslateElementInit = () => {
-      new (window as any).google.translate.TranslateElement(
-        {
-          pageLanguage: "ar",
-          includedLanguages: "ar,en",
-          layout: (window as any).google.translate.TranslateElement.InlineLayout.SIMPLE,
-        },
-        "google_translate_element"
-      );
-    };
-  }
-
-
-    // تحديد اللغة من الكوكيز عند التحميل (مرة واحدة)
-   const cookieValue = getCookie("googtrans");
-  let googtrans = "";
-  if (typeof cookieValue === "string") {
-    googtrans = cookieValue;
-  }
-  if (googtrans.includes("en")) {
-    setLang("en");
-  } else {
-    setLang("ar");
-  }
-}, []);
-  // useEffect الثاني: للـ direction فقط (بدون setLang)
   useEffect(() => {
-    // set direction when lang changes
+    // Google Translate script
+    if (!(window as any).googleTranslateElementInit) {
+      const addScript = document.createElement("script");
+      addScript.src = "//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit";
+      document.body.appendChild(addScript);
+      (window as any).googleTranslateElementInit = () => {
+        new (window as any).google.translate.TranslateElement(
+          {
+            pageLanguage: "ar",
+            includedLanguages: "ar,en",
+            layout: (window as any).google.translate.TranslateElement.InlineLayout.SIMPLE,
+          },
+          "google_translate_element"
+        );
+      };
+    }
+
+    // تحديد اللغة من الكوكيز
+    const cookieValue = getCookie("googtrans");
+    let googtrans = "";
+    if (typeof cookieValue === "string") googtrans = cookieValue;
+    if (googtrans.includes("en")) setLang("en");
+    else setLang("ar");
+  }, []);
+
+  useEffect(() => {
     document.documentElement.lang = lang === "ar" ? "ar" : "en";
     document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
   }, [lang]);
@@ -325,19 +292,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html>
       <body className="bg-[#121921] text-white min-h-[100vh] h-auto overflow-y-auto antialiased">
-        {/* div مخفي لـ Google Translate */}
         <div id="google_translate_element" style={{ display: "none" }}></div>
-
-        {/* Navbar */}
         <Navbar lang={lang} setLang={setLang} />
-
-        {/* content wrapper with top offset because navbar is fixed height 80px */}
         <main className="pt-20 relative">
           {children}
           <Footer lang={lang} />
         </main>
-
-        {/* Floating logo */}
         <FloatingLogo lang={lang} />
       </body>
     </html>
