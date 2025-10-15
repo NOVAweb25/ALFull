@@ -280,7 +280,11 @@ export function FloatingLogo({ lang }: { lang: "ar" | "en" }) {
                   className="absolute bottom-24 flex flex-col items-center gap-4"
                 >
                   {[
-                    { href: "tel:+966500000000", src: iconPhone, alt: "Phone" },
+                    {
+                      href: "tel:+966500000000", // يفتح تطبيق الاتصال مباشرة
+                      src: iconPhone,
+                      alt: "Call",
+                    },
                     { href: "mailto:info@example.com", src: iconMail, alt: "Email" },
                     { href: "https://wa.me/966500000000", src: iconWhatsapp, alt: "WhatsApp" },
                   ].map((icon, i) => (
