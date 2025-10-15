@@ -1,7 +1,7 @@
 // app/layout.tsx
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef  } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence, easeOut } from "framer-motion";
@@ -38,6 +38,29 @@ export function Navbar({
   const pathname = usePathname() || "/";
   const isRTL = lang === "ar";
   const [menuOpen, setMenuOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
+
+  // 🔹 إغلاق القائمة عند النقر خارجها
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        setMenuOpen(false);
+      }
+    }
+    if (menuOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    } else {
+      document.removeEventListener("mousedown", handleClickOutside);
+    }
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [menuOpen]);
+
+  // 🔹 انميشن للقائمة
+  const menuVariants = {
+    hidden: { opacity: 0, y: -20 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.25, ease: easeOut } },
+    exit: { opacity: 0, y: -20, transition: { duration: 0.25, ease: easeOut } },
+  };
 
   return (
     <header className="fixed inset-x-0 top-0 z-50 backdrop-blur-lg bg-[rgba(30,58,95,0.25)] border-b border-[rgba(255,255,255,0.08)] shadow-[0_4px_20px_rgba(0,0,0,0.25)]">
@@ -46,7 +69,7 @@ export function Navbar({
           isRTL ? "flex-row-reverse" : ""
         }`}
       >
-        {/* 🔹 روابط التنقل */}
+        {/* روابط التنقل */}
         <div className="flex items-center gap-6">
           <ul className="hidden md:flex items-center gap-6">
             {NAV_ITEMS.map((item) => (
@@ -65,32 +88,12 @@ export function Navbar({
           </ul>
         </div>
 
-        {/* 🔸 الشعار */}
+        {/* الشعار */}
         <div className="flex-1 flex items-center justify-center pointer-events-none md:pointer-events-auto">
-          <motion.div
-            key={`logo-${lang}`}
-            initial={{ opacity: 0, scale: 0.85 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.9, ease: "easeOut" }}
-            className="pointer-events-auto"
-          >
-            <div className="flex items-center gap-3">
-              <Image src={logo} alt="Alfull logo" className="w-12 h-12 md:w-14 md:h-14 object-contain" />
-              <div className="hidden md:block text-white/90">
-                <div className="text-sm font-medium">
-                  {lang === "ar" ? "الفل للمقاولات" : "Alfull Contracting"}
-                </div>
-                <div className="text-xs text-white/40">
-                  {lang === "ar"
-                    ? "والتطوير العقاري"
-                    : "and Real Estate Development"}
-                </div>
-              </div>
-            </div>
-          </motion.div>
+          <Image src={logo} alt="Alfull logo" className="w-12 h-12 md:w-14 md:h-14 object-contain" />
         </div>
 
-        {/* 🔹 زر تغيير اللغة + قائمة الجوال */}
+        {/* زر اللغة + قائمة الجوال */}
         <div className="flex items-center gap-4">
           <button
             aria-label="toggle-language"
@@ -106,7 +109,7 @@ export function Navbar({
             {lang === "ar" ? "AR" : "EN"}
           </button>
 
-          {/* قائمة الجوال */}
+          {/* زر قائمة الجوال */}
           <button onClick={() => setMenuOpen(!menuOpen)} className="md:hidden p-2">
             <svg
               className="w-7 h-7 text-white"
@@ -118,32 +121,38 @@ export function Navbar({
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                d={
-                  menuOpen
-                    ? "M6 18L18 6M6 6l12 12"
-                    : "M4 6h16M4 12h16M4 18h16"
-                }
+                d={menuOpen ? "M6 18L18 6M6 6l12 12" : "M4 6h16M4 12h16M4 18h16"}
               />
             </svg>
           </button>
         </div>
       </nav>
 
-      {/* 🔸 قائمة الجوال المنسدلة */}
-      {menuOpen && (
-        <div className="md:hidden absolute top-20 inset-x-0 bg-[#1e3a5f]/95 backdrop-blur-md border-t border-white/10 flex flex-col items-center py-6 space-y-4">
-          {NAV_ITEMS.map((item) => (
-            <Link
-              key={item.key}
-              href={item.href}
-              className="text-white/90 text-lg hover:text-[#fdb81c] transition"
-              onClick={() => setMenuOpen(false)}
-            >
-              {isRTL ? item.ar : item.en}
-            </Link>
-          ))}
-        </div>
-      )}
+      {/* القائمة المنسدلة بانميشن */}
+      <AnimatePresence>
+        {menuOpen && (
+          <motion.div
+            ref={menuRef}
+            key="mobile-menu"
+            initial="hidden"
+            animate="visible"
+            exit="exit"
+            variants={menuVariants}
+            className="md:hidden absolute top-20 inset-x-0 bg-[#1e3a5f]/95 backdrop-blur-md border-t border-white/10 flex flex-col items-center py-6 space-y-4"
+          >
+            {NAV_ITEMS.map((item) => (
+              <Link
+                key={item.key}
+                href={item.href}
+                className="text-white/90 text-lg hover:text-[#fdb81c] transition"
+                onClick={() => setMenuOpen(false)}
+              >
+                {isRTL ? item.ar : item.en}
+              </Link>
+            ))}
+          </motion.div>
+        )}
+      </AnimatePresence>
     </header>
   );
 }
