@@ -9,7 +9,7 @@ export default function Contact() {
   const [copiedField, setCopiedField] = useState<"phone" | "email" | null>(null);
 
   const phoneNumber = "+966505304806";
-  const email = "info@yourcompany.com";
+  const email = "office@alful.net";
 
   const handleMapClick = () => {
     window.open(
@@ -83,25 +83,32 @@ export default function Contact() {
             </button>
           </div>
 
-          {/* البريد الإلكتروني */}
-          <div className="w-full md:w-3/4 bg-[#1e3a5f]/40 backdrop-blur-md rounded-2xl border-b-4 border-gradient-gold p-6 flex items-center justify-between gap-4 fade-in shadow-lg">
-            <div className="flex items-center gap-4 cursor-pointer" onClick={() => window.open(`mailto:${email}`)}>
-              <div className="w-14 h-14 flex items-center justify-center bg-[#fdb81c]/10 rounded-full">
-                <Image src="/mail.svg" alt="Email Icon" width={32} height={32} />
-              </div>
-              <div>
-                <h3 className="text-lg font-semibold text-[#fdb81c]">البريد الإلكتروني</h3>
-                <p className="text-sm md:text-base text-gray-200">{email}</p>
-              </div>
-            </div>
-            <button
-              className="text-gray-200 hover:text-white text-2xl"
-              onClick={() => copyToClipboard(email, "email")}
-              title="نسخ البريد"
-            >
-              {copiedField === "email" ? <FiCheck /> : <FiCopy />}
-            </button>
-          </div>
+         {/* البريد الإلكتروني */}
+<div className="w-full md:w-3/4 bg-[#1e3a5f]/40 backdrop-blur-md rounded-2xl border-b-4 border-gradient-gold p-6 flex items-center justify-between gap-4 fade-in shadow-lg">
+  <a
+  href="mailto:office@alful.net"
+  className="flex items-center gap-4 w-full"
+>
+  <div className="w-14 h-14 flex items-center justify-center bg-[#fdb81c]/10 rounded-full">
+    <Image src="/mail.svg" alt="Email Icon" width={32} height={32} />
+  </div>
+  <div>
+    <h3 className="text-lg font-semibold text-[#fdb81c]">البريد الإلكتروني</h3>
+    <p className="text-sm md:text-base text-gray-200">office@alful.net</p>
+  </div>
+</a>
+
+
+
+  <button
+    className="text-gray-200 hover:text-white text-2xl"
+    onClick={() => copyToClipboard(email, "email")}
+    title="نسخ البريد"
+  >
+    {copiedField === "email" ? <FiCheck /> : <FiCopy />}
+  </button>
+</div>
+
         </div>
 
         {/* نافذة منبثقة للهاتف */}
