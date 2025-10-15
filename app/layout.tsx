@@ -28,14 +28,25 @@ const NAV_ITEMS = [
 // -----------------------------
 // Navbar Component
 // -----------------------------
-export function Navbar({ lang, setLang }: { lang: "ar" | "en"; setLang: (l: "ar" | "en") => void }) {
+export function Navbar({
+  lang,
+  setLang,
+}: {
+  lang: "ar" | "en";
+  setLang: (l: "ar" | "en") => void;
+}) {
   const pathname = usePathname() || "/";
   const isRTL = lang === "ar";
+  const [menuOpen, setMenuOpen] = useState(false);
 
   return (
     <header className="fixed inset-x-0 top-0 z-50 backdrop-blur-lg bg-[rgba(30,58,95,0.25)] border-b border-[rgba(255,255,255,0.08)] shadow-[0_4px_20px_rgba(0,0,0,0.25)]">
-      <nav className={`max-w-7xl mx-auto px-6 md:px-10 h-20 flex items-center justify-between ${isRTL ? 'flex-row-reverse' : ''}`}>
-        {/* Right side - navigation links */}
+      <nav
+        className={`max-w-7xl mx-auto px-4 md:px-10 h-20 flex items-center justify-between ${
+          isRTL ? "flex-row-reverse" : ""
+        }`}
+      >
+        {/* 🔹 روابط التنقل */}
         <div className="flex items-center gap-6">
           <ul className="hidden md:flex items-center gap-6">
             {NAV_ITEMS.map((item) => (
@@ -54,50 +65,88 @@ export function Navbar({ lang, setLang }: { lang: "ar" | "en"; setLang: (l: "ar"
           </ul>
         </div>
 
-        {/* Center: Logo */}
+        {/* 🔸 الشعار */}
         <div className="flex-1 flex items-center justify-center pointer-events-none md:pointer-events-auto">
-          <motion.div 
-            key={`logo-${lang}`}  
+          <motion.div
+            key={`logo-${lang}`}
             initial={{ opacity: 0, scale: 0.85 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.9, ease: "easeOut" }}
             className="pointer-events-auto"
           >
             <div className="flex items-center gap-3">
-              <Image
-                src={logo}
-                alt="Alfull logo"
-                className="w-14 h-14 object-contain"
-              />
+              <Image src={logo} alt="Alfull logo" className="w-12 h-12 md:w-14 md:h-14 object-contain" />
               <div className="hidden md:block text-white/90">
-                <div className="text-sm font-medium">{lang === 'ar' ? 'الفل للمقاولات' : 'Alfull Contracting'}</div>
-                <div className="text-xs text-white/40">{lang === 'ar' ? 'والتطوير العقاري' : 'and Real Estate Development'}</div>
+                <div className="text-sm font-medium">
+                  {lang === "ar" ? "الفل للمقاولات" : "Alfull Contracting"}
+                </div>
+                <div className="text-xs text-white/40">
+                  {lang === "ar"
+                    ? "والتطوير العقاري"
+                    : "and Real Estate Development"}
+                </div>
               </div>
             </div>
           </motion.div>
         </div>
 
-        {/* Left side - language toggle */}
+        {/* 🔹 زر تغيير اللغة + قائمة الجوال */}
         <div className="flex items-center gap-4">
           <button
             aria-label="toggle-language"
             onClick={() => {
               const newLang = lang === "ar" ? "en" : "ar";
               const googtrans = newLang === "ar" ? "/auto/ar" : "/auto/en";
-              setCookie("googtrans", googtrans, { maxAge: 60 * 60 * 24 * 365 });  
+              setCookie("googtrans", googtrans, { maxAge: 60 * 60 * 24 * 365 });
               setLang(newLang);
               setTimeout(() => window.location.reload(), 50);
             }}
-            className="px-3 py-1 rounded-full border border-white/6 bg-[rgba(255,255,255,0.02)] text-white/80 hover:bg-[rgba(255,255,255,0.04)] transition"
+            className="px-3 py-1 rounded-full border border-white/10 bg-[rgba(255,255,255,0.03)] text-white/80 hover:bg-[rgba(255,255,255,0.06)] transition"
           >
             {lang === "ar" ? "AR" : "EN"}
           </button>
+
+          {/* قائمة الجوال */}
+          <button onClick={() => setMenuOpen(!menuOpen)} className="md:hidden p-2">
+            <svg
+              className="w-7 h-7 text-white"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d={
+                  menuOpen
+                    ? "M6 18L18 6M6 6l12 12"
+                    : "M4 6h16M4 12h16M4 18h16"
+                }
+              />
+            </svg>
+          </button>
         </div>
       </nav>
+
+      {/* 🔸 قائمة الجوال المنسدلة */}
+      {menuOpen && (
+        <div className="md:hidden absolute top-20 inset-x-0 bg-[#1e3a5f]/95 backdrop-blur-md border-t border-white/10 flex flex-col items-center py-6 space-y-4">
+          {NAV_ITEMS.map((item) => (
+            <Link
+              key={item.key}
+              href={item.href}
+              className="text-white/90 text-lg hover:text-[#fdb81c] transition"
+              onClick={() => setMenuOpen(false)}
+            >
+              {isRTL ? item.ar : item.en}
+            </Link>
+          ))}
+        </div>
+      )}
     </header>
   );
 }
-
 // -----------------------------
 // Footer Component
 // -----------------------------
