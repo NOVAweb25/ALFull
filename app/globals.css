@@ -26,7 +26,7 @@
 /* ✨ إعدادات الخط والخلفية العامة */
 html,
 body {
-  @apply bg-[#121921] text-white font-sans scroll-smooth;
+  @apply bg-[#1e3a5f] text-white font-sans scroll-smooth;
   font-family: 'Poppins', 'Segoe UI', sans-serif;
 }
 
