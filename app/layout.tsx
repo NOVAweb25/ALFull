@@ -193,7 +193,7 @@ export function Footer({ lang }: { lang: "ar" | "en" }) {
           />
           <p className="max-w-sm text-sm text-white/70">{lang === 'ar' ? 'شركة متخصصة في أعمال المقاولات والتطوير العقاري مع خبرة في المشاريع السكنية والتجارية.' : 'A contracting and real estate development company experienced in residential and commercial projects.'}</p>
           <div className="w-20 h-[2px] bg-gradient-to-r from-[#FDB81C] to-[#FFD166] my-4" />
-          <div className="text-xs text-white/50">{lang === 'ar' ? 'الرقم الضريبي: 1234567890' : 'Tax ID: 1234567890'}</div>
+          <div className="text-xs text-white/50">{lang === 'ar' ? 'الرقم الضريبي: 314157857600003' : 'Tax ID: 314157857600003'}</div>
         </div>
       </div>
     </footer>
@@ -285,7 +285,7 @@ export function FloatingLogo({ lang }: { lang: "ar" | "en" }) {
                       src: iconPhone,
                       alt: "Call",
                     },
-                    { href: "mailto:info@example.com", src: iconMail, alt: "Email" },
+                    { href: "mailto:office@alful.net", src: iconMail, alt: "Email" },
                     { href: "https://wa.me/966505304806", src: iconWhatsapp, alt: "WhatsApp" },
                   ].map((icon, i) => (
                     <motion.a
