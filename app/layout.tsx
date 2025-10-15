@@ -281,12 +281,12 @@ export function FloatingLogo({ lang }: { lang: "ar" | "en" }) {
                 >
                   {[
                     {
-                      href: "tel:+966500000000", // يفتح تطبيق الاتصال مباشرة
+                      href: "tel:+966505304806", // يفتح تطبيق الاتصال مباشرة
                       src: iconPhone,
                       alt: "Call",
                     },
                     { href: "mailto:info@example.com", src: iconMail, alt: "Email" },
-                    { href: "https://wa.me/966500000000", src: iconWhatsapp, alt: "WhatsApp" },
+                    { href: "https://wa.me/966505304806", src: iconWhatsapp, alt: "WhatsApp" },
                   ].map((icon, i) => (
                     <motion.a
                       key={`icon-${i}-${lang}`}
