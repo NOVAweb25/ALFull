@@ -1,14 +1,13 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { ChevronUp, ChevronDown } from "lucide-react";
+import { motion } from "framer-motion";
 import Vision from "./Vision";
 import Values from "./Values";
 
 export default function VisionValues() {
-  const [activeSlide, setActiveSlide] = useState(0); // 0 = Vision, 1 = Values
   const slides = [<Vision key="vision" />, <Values key="values" />];
+  const [activeSlide, setActiveSlide] = useState(0);
 
   // ✅ كشف حجم الشاشة للتأقلم
   const [isMobile, setIsMobile] = useState(false);
@@ -19,60 +18,59 @@ export default function VisionValues() {
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
-  // ✅ التحكم في التنقل بالسحب أو السكرول (للاب فقط)
-  useEffect(() => {
-    if (isMobile) return; // على الجوال لا نتحكم بالاسكرول
-    const handleWheel = (e: WheelEvent) => {
-      if (e.deltaY > 0 && activeSlide < slides.length - 1) {
-        setActiveSlide((prev) => prev + 1);
-        e.preventDefault();
-      } else if (e.deltaY < 0 && activeSlide > 0) {
-        setActiveSlide((prev) => prev - 1);
-        e.preventDefault();
-      }
-    };
-    window.addEventListener("wheel", handleWheel, { passive: false });
-    return () => window.removeEventListener("wheel", handleWheel);
-  }, [activeSlide, isMobile]);
-
-  const variants = {
-    enter: { opacity: 0, y: 100 },
-    center: { opacity: 1, y: 0 },
-    exit: { opacity: 0, y: -100 },
-  };
-
   if (isMobile) {
-    // على الجوال، نجعل كل سلايد يأخذ ارتفاع الشاشة ويمكن التمرير الطبيعي
+    // على الجوال: سلايدات أفقي، عرض كامل، نقاط تنقل
     return (
-      <div className="flex flex-col w-full overflow-y-auto scroll-smooth snap-y snap-mandatory h-screen">
-        {slides.map((slide, idx) => (
-          <div
-            key={idx}
-            className="snap-start min-h-screen w-full"
-          >
-            {slide}
-          </div>
-        ))}
+      <div className="relative w-full overflow-hidden">
+        <div
+          className="flex w-full overflow-x-auto snap-x snap-mandatory scroll-smooth"
+          onScroll={(e) => {
+            const scrollLeft = (e.target as HTMLDivElement).scrollLeft;
+            const width = (e.target as HTMLDivElement).offsetWidth;
+            const index = Math.round(scrollLeft / width);
+            setActiveSlide(index);
+          }}
+        >
+          {slides.map((slide, idx) => (
+            <motion.div
+              key={idx}
+              className="snap-start flex-shrink-0 w-screen h-screen"
+              initial={{ opacity: 0, x: 50 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.6, delay: idx * 0.1 }}
+            >
+              {slide}
+            </motion.div>
+          ))}
+        </div>
+
+        {/* نقاط التنقل */}
+        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-2">
+          {slides.map((_, idx) => (
+            <span
+              key={idx}
+              className={`w-3 h-3 rounded-full transition-colors ${
+                idx === activeSlide ? "bg-[#ffd166]" : "bg-white/40"
+              }`}
+            />
+          ))}
+        </div>
       </div>
     );
   }
 
-  // على اللاب، نظام السلايدات + الأسهم
+  // على اللاب، نظام السلايدات + أسهم عمودية
   return (
     <div className="relative h-screen overflow-hidden">
-      <AnimatePresence mode="wait">
-        <motion.div
-          key={activeSlide}
-          variants={variants}
-          initial="enter"
-          animate="center"
-          exit="exit"
-          transition={{ duration: 0.8 }}
-          className="h-full w-full"
-        >
-          {slides[activeSlide]}
-        </motion.div>
-      </AnimatePresence>
+      <motion.div
+        key={activeSlide}
+        initial={{ opacity: 0, y: 50 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8 }}
+        className="h-full w-full"
+      >
+        {slides[activeSlide]}
+      </motion.div>
 
       {/* الأسهم للتنقل */}
       <div className="absolute right-5 top-1/2 -translate-y-1/2 flex flex-col gap-4 z-20">
@@ -82,7 +80,7 @@ export default function VisionValues() {
             activeSlide === 0 ? "opacity-30 cursor-default" : "hover:scale-110"
           } bg-gradient-to-r from-[#1e3a5f] to-[#8b1e3f]`}
         >
-          <ChevronUp className="text-[#ffd166]" />
+          ↑
         </button>
         <button
           onClick={() =>
@@ -94,7 +92,7 @@ export default function VisionValues() {
               : "hover:scale-110"
           } bg-gradient-to-r from-[#1e3a5f] to-[#8b1e3f]`}
         >
-          <ChevronDown className="text-[#ffd166]" />
+          ↓
         </button>
       </div>
     </div>
