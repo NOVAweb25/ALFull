@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import Vision from "./Vision";
 import Values from "./Values";
 
@@ -9,7 +9,7 @@ export default function VisionValues() {
   const slides = [<Vision key="vision" />, <Values key="values" />];
   const [activeSlide, setActiveSlide] = useState(0);
 
-  // ✅ كشف حجم الشاشة للتأقلم
+  // كشف حجم الشاشة للتأقلم
   const [isMobile, setIsMobile] = useState(false);
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth < 768);
@@ -18,8 +18,28 @@ export default function VisionValues() {
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
+  // التحكم بالاسكرول والـ touchpad على اللاب
+  useEffect(() => {
+    if (isMobile) return;
+    const handleWheel = (e: WheelEvent) => {
+      if (e.deltaY > 50 && activeSlide < slides.length - 1) {
+        setActiveSlide((prev) => prev + 1);
+      } else if (e.deltaY < -50 && activeSlide > 0) {
+        setActiveSlide((prev) => prev - 1);
+      }
+    };
+    window.addEventListener("wheel", handleWheel, { passive: true });
+    return () => window.removeEventListener("wheel", handleWheel);
+  }, [activeSlide, isMobile]);
+
+  const variants = {
+    enter: { opacity: 0, x: 50 },
+    center: { opacity: 1, x: 0 },
+    exit: { opacity: 0, x: -50 },
+  };
+
   if (isMobile) {
-    // على الجوال: سلايدات أفقي، عرض كامل، نقاط تنقل
+    // سلايدات الجوال أفقي
     return (
       <div className="relative w-full overflow-hidden">
         <div
@@ -59,41 +79,41 @@ export default function VisionValues() {
     );
   }
 
-  // على اللاب، نظام السلايدات + أسهم عمودية
+  // سلايدات اللاب
   return (
     <div className="relative h-screen overflow-hidden">
-      <motion.div
-        key={activeSlide}
-        initial={{ opacity: 0, y: 50 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8 }}
-        className="h-full w-full"
-      >
-        {slides[activeSlide]}
-      </motion.div>
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={activeSlide}
+          variants={variants}
+          initial="enter"
+          animate="center"
+          exit="exit"
+          transition={{ duration: 0.8 }}
+          className="h-full w-full flex items-center justify-center"
+        >
+          <div className="w-[100%] h-[100%]">{slides[activeSlide]}</div>
+        </motion.div>
+      </AnimatePresence>
 
-      {/* الأسهم للتنقل */}
-      <div className="absolute right-5 top-1/2 -translate-y-1/2 flex flex-col gap-4 z-20">
-        <button
-          onClick={() => setActiveSlide(Math.max(0, activeSlide - 1))}
-          className={`p-2 rounded-full transition-all ${
-            activeSlide === 0 ? "opacity-30 cursor-default" : "hover:scale-110"
-          } bg-gradient-to-r from-[#1e3a5f] to-[#8b1e3f]`}
-        >
-          ↑
-        </button>
-        <button
-          onClick={() =>
-            setActiveSlide(Math.min(slides.length - 1, activeSlide + 1))
-          }
-          className={`p-2 rounded-full transition-all ${
-            activeSlide === slides.length - 1
-              ? "opacity-30 cursor-default"
-              : "hover:scale-110"
-          } bg-gradient-to-r from-[#1e3a5f] to-[#8b1e3f]`}
-        >
-          ↓
-        </button>
+      {/* الأسهم مثل نيوم */}
+      <div className="absolute right-8 top-1/2 -translate-y-1/2 flex flex-col gap-4 z-20">
+        {activeSlide > 0 && (
+          <button
+            onClick={() => setActiveSlide(activeSlide - 1)}
+            className="w-12 h-12 rounded-full bg-white/20 hover:bg-white/40 flex items-center justify-center text-2xl font-bold text-white transition"
+          >
+            ↑
+          </button>
+        )}
+        {activeSlide < slides.length - 1 && (
+          <button
+            onClick={() => setActiveSlide(activeSlide + 1)}
+            className="w-12 h-12 rounded-full bg-white/20 hover:bg-white/40 flex items-center justify-center text-2xl font-bold text-white transition"
+          >
+            ↓
+          </button>
+        )}
       </div>
     </div>
   );

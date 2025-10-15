@@ -11,20 +11,21 @@ export default function Values() {
       {/* القسم الأيسر (الصورة الكبيرة) */}
       <div className="flex justify-center items-center w-full md:w-1/2 py-6 md:py-0">
         <motion.div
-          initial={{ opacity: 0, y: 50, scale: 0.95 }}
-          animate={{ opacity: 1, y: 0, scale: 1 }}
-          transition={{ duration: 0.8 }}
-          className="w-[85%] md:w-auto" // على الجوال تاخذ 85% من العرض، على اللاب auto
-        >
-          <Image
-            src="/values.svg"
-            alt="قيمنا"
-            width={600}       // حجم اللاب
-            height={400}
-            className="object-contain w-full h-auto brightness-90"
-            priority
-          />
-        </motion.div>
+  initial={{ opacity: 0, y: 50, scale: 0.95 }}
+  animate={{ opacity: 1, y: 0, scale: 1 }}
+  transition={{ duration: 0.8 }}
+  className="w-[85%] md:w-[70%] lg:w-[60%]" // أصغر على اللاب/شاشات أكبر
+>
+  <Image
+    src="/values.svg"
+    alt="قيمنا"
+    width={500}   // حجم أصغر على اللاب
+    height={350}
+    className="object-contain w-full h-auto brightness-90"
+    priority
+  />
+</motion.div>
+
       </div>
 
       {/* القسم الأيمن (النص) */}
