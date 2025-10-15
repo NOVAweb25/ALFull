@@ -10,8 +10,18 @@ export default function VisionValues() {
   const [activeSlide, setActiveSlide] = useState(0); // 0 = Vision, 1 = Values
   const slides = [<Vision key="vision" />, <Values key="values" />];
 
-  // التحكم في التنقل بالسحب أو السكرول
+  // ✅ كشف حجم الشاشة للتأقلم
+  const [isMobile, setIsMobile] = useState(false);
   useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
+  // ✅ التحكم في التنقل بالسحب أو السكرول (للاب فقط)
+  useEffect(() => {
+    if (isMobile) return; // على الجوال لا نتحكم بالاسكرول
     const handleWheel = (e: WheelEvent) => {
       if (e.deltaY > 0 && activeSlide < slides.length - 1) {
         setActiveSlide((prev) => prev + 1);
@@ -23,18 +33,33 @@ export default function VisionValues() {
     };
     window.addEventListener("wheel", handleWheel, { passive: false });
     return () => window.removeEventListener("wheel", handleWheel);
-  }, [activeSlide]);
+  }, [activeSlide, isMobile]);
 
-  // حركات السلايدات
   const variants = {
     enter: { opacity: 0, y: 100 },
     center: { opacity: 1, y: 0 },
     exit: { opacity: 0, y: -100 },
   };
 
+  if (isMobile) {
+    // على الجوال، نجعل كل سلايد يأخذ ارتفاع الشاشة ويمكن التمرير الطبيعي
+    return (
+      <div className="flex flex-col w-full overflow-y-auto scroll-smooth snap-y snap-mandatory h-screen">
+        {slides.map((slide, idx) => (
+          <div
+            key={idx}
+            className="snap-start min-h-screen w-full"
+          >
+            {slide}
+          </div>
+        ))}
+      </div>
+    );
+  }
+
+  // على اللاب، نظام السلايدات + الأسهم
   return (
     <div className="relative h-screen overflow-hidden">
-      {/* ✅ السلايدات */}
       <AnimatePresence mode="wait">
         <motion.div
           key={activeSlide}
@@ -49,7 +74,7 @@ export default function VisionValues() {
         </motion.div>
       </AnimatePresence>
 
-      {/* ✅ الأسهم للتنقل */}
+      {/* الأسهم للتنقل */}
       <div className="absolute right-5 top-1/2 -translate-y-1/2 flex flex-col gap-4 z-20">
         <button
           onClick={() => setActiveSlide(Math.max(0, activeSlide - 1))}
