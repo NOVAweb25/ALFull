@@ -13,7 +13,7 @@ export default function Contact() {
 
   const handleMapClick = () => {
     window.open(
-      "https://www.google.com/maps/place/Riyadh,+Saudi+Arabia/",
+      "https://maps.app.goo.gl/DHXkEd3Aq8Nc1ej1A",
       "_blank"
     );
   };
