@@ -2,65 +2,86 @@
 
 import Image from "next/image";
 import { motion } from "framer-motion";
-import React from "react";
+import React, { useState, useEffect, useRef } from "react";
+
+interface Slide {
+  desktop: string;
+  mobile: string;
+}
 
 export default function LablePage() {
-  const slides = ["/slide1.png", "/slide2.png"];
+  const slides: Slide[] = [
+    { desktop: "/slide1-desktop.png", mobile: "/slide1-mobile.png" },
+    { desktop: "/slide2-desktop.png", mobile: "/slide2-mobile.png" },
+  ];
+
+  const [activeSlide, setActiveSlide] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
+  const sliderRef = useRef<HTMLDivElement>(null);
+
+  // ✅ كشف حجم الشاشة
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth < 768);
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  // ✅ تحديد الشريحة النشطة عند scroll
+  useEffect(() => {
+    const slider = sliderRef.current;
+    if (!slider) return;
+
+    const onScroll = () => {
+      const scrollLeft = slider.scrollLeft;
+      const width = slider.clientWidth;
+      const index = Math.round(scrollLeft / width);
+      setActiveSlide(index);
+    };
+
+    slider.addEventListener("scroll", onScroll, { passive: true });
+    return () => slider.removeEventListener("scroll", onScroll);
+  }, []);
 
   return (
     <div className="relative w-screen h-[100dvh] overflow-hidden">
-      {/* ✅ السلايدر */}
-      <div className="flex w-screen h-[100dvh] overflow-x-auto snap-x snap-mandatory scroll-smooth no-scrollbar">
-        {slides.map((src, i) => (
+      {/* السلايدر */}
+      <div
+        ref={sliderRef}
+        className="flex w-screen h-[100dvh] overflow-x-auto snap-x snap-mandatory scroll-smooth no-scrollbar"
+      >
+        {slides.map((slide, i) => (
           <motion.div
             key={i}
             className="flex-shrink-0 w-screen h-[100dvh] relative snap-center"
-            initial={{ opacity: 0, scale: 1.05 }}
+            initial={{ opacity: 0.7, scale: 1.02 }}
             animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 1, delay: i * 0.2 }}
+            transition={{ duration: 0.8, delay: i * 0.2 }}
           >
             <Image
-              src={src}
+              src={isMobile ? slide.mobile : slide.desktop}
               alt={`slide-${i}`}
               fill
-              className="object-cover md:object-center"
+              className="object-cover object-center"
+              sizes="100vw"
               priority={i === 0}
             />
-            {/* طبقة تظليل خفيفة */}
-            <div className="absolute inset-0 bg-black/30 md:bg-black/20" />
-            
-            {/* محتوى السلايد */}
-            <div className="absolute inset-0 flex flex-col items-center justify-center text-center text-white px-6">
-              <motion.h1
-                className="text-3xl md:text-5xl font-bold drop-shadow-lg"
-                initial={{ y: 40, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                transition={{ duration: 1, delay: 0.3 }}
-              >
-                {i === 0 ? "نص ترحيبي أو عنوان رئيسي" : "عنوان سلايد ثاني"}
-              </motion.h1>
-              <motion.p
-                className="mt-4 text-sm md:text-lg text-white/80 max-w-lg leading-relaxed"
-                initial={{ y: 30, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                transition={{ duration: 1, delay: 0.5 }}
-              >
-                {i === 0
-                  ? "يمكنك إضافة وصف قصير هنا يعرض فكرة المشروع أو الشركة بشكل بسيط."
-                  : "مثال لنص وصفي آخر يظهر عند التبديل بين السلايدات."}
-              </motion.p>
-            </div>
+            {/* طبقة تظليل */}
+            <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/40" />
           </motion.div>
         ))}
       </div>
 
-      {/* ✅ النقاط السفلية */}
+      {/* النقاط السفلية */}
       <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-2 z-10">
         {slides.map((_, i) => (
-          <span
+          <motion.span
             key={i}
-            className="w-3 h-3 rounded-full bg-white/50 hover:bg-[#ffd166] transition"
-          ></span>
+            className={`w-3 h-3 rounded-full transition-all duration-300 ${
+              activeSlide === i ? "bg-[#ffd166]" : "bg-white/50"
+            }`}
+            layout
+          />
         ))}
       </div>
     </div>
