@@ -53,7 +53,7 @@ export default function Contact() {
           <div className="absolute bottom-6 left-6 right-6 bg-[#1e3a5f]/60 backdrop-blur-md border-b-4 border-gradient-gold rounded-2xl p-5 flex flex-col gap-1 shadow-lg">
             <h3 className="text-lg font-semibold text-[#fdb81c]">موقع الشركة</h3>
             <p className="text-sm text-gray-200">
-              المدينة المنورة - حي العليا - شارع التحلية - مقر شركة الفل للمقاولات و التطوير العقاري
+              المدينة المنورة - حي مذينب - شارع أوس بن مالك بن قيس - مقر شركة الفل للمقاولات و التطوير العقاري
             </p>
             <span className="text-xs text-gray-400 mt-1">
               انقر على الخريطة لمعرفة الاتجاهات →

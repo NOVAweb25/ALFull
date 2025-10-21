@@ -191,7 +191,7 @@ export function Footer({ lang }: { lang: "ar" | "en" }) {
             alt="Alfull logo"
             className="w-20 h-20 object-contain"
           />
-          <p className="max-w-sm text-sm text-white/70">{lang === 'ar' ? 'شركة متخصصة في أعمال المقاولات والتطوير العقاري مع خبرة في المشاريع السكنية والتجارية.' : 'A contracting and real estate development company experienced in residential and commercial projects.'}</p>
+          <p className="max-w-sm text-sm text-white/70">{lang === 'ar' ? 'معتمدة بالتصنيف الرابع ومطوّر عقاري رسمي من وزارة الإسكان، بخبرة تفوق 30 عاماً في مشاريع المقاولات والبنية التحتية والتطوير العقاري.' : 'A contracting and real estate development company experienced in residential and commercial projects.'}</p>
           <div className="w-20 h-[2px] bg-gradient-to-r from-[#FDB81C] to-[#FFD166] my-4" />
           <div className="text-xs text-white/50">{lang === 'ar' ? 'الرقم الضريبي: 314157857600003' : 'Tax ID: 314157857600003'}</div>
         </div>
