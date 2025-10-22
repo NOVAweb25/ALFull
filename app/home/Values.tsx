@@ -99,26 +99,26 @@ export default function Values() {
               >
                 {/* الأيقونة المتحركة خارج المربع */}
                 <motion.div
-                  initial={{ x: 100, opacity: 0, scale: 0.8 }}
-                  animate={{ x: 0, opacity: 1, scale: 1 }}
-                  transition={{
-                    duration: 0.7,
-                    delay: value.delay,
-                    type: "spring",
-                    stiffness: 80,
-                  }}
-                  className="absolute -left-6 md:-left-10 top-1/2 -translate-y-1/2 
-                             w-14 h-14 md:w-16 md:h-16 rounded-full bg-white flex items-center justify-center 
-                             shadow-lg shadow-white/20"
-                >
-                  <Image
-                    src={value.icon}
-                    alt={value.title}
-                    width={35}
-                    height={35}
-                    className="object-contain"
-                  />
-                </motion.div>
+  initial={{ x: 100, opacity: 0, scale: 0.8 }}
+  animate={{ x: 0, opacity: 1, scale: 1 }}
+  transition={{
+    duration: 0.7,
+    delay: value.delay,
+    type: "spring",
+    stiffness: 80,
+  }}
+  className="absolute -left-6 md:-left-10 top-1/2 -translate-y-1/2 
+             w-16 h-16 md:w-20 md:h-20 rounded-full bg-[#F5F5F5] flex items-center justify-center 
+             shadow-lg shadow-white/20"
+>
+  <Image
+    src={value.icon}
+    alt={value.title}
+    width={40}
+    height={40}
+    className="object-contain"
+  />
+</motion.div>
 
                 <p>
                   <span className="text-[#fdb81c] font-semibold">
