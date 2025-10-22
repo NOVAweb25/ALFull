@@ -1,5 +1,9 @@
 # اجبار Git على استخدام LF لجميع ملفات النصوص
 * text=auto eol=lf
+public/**/*.mp4 filter=lfs diff=lfs merge=lfs -text
+public/**/*.jpg filter=lfs diff=lfs merge=lfs -text
+public/**/*.png filter=lfs diff=lfs merge=lfs -text
+public/**/*.svg filter=lfs diff=lfs merge=lfs -text
 *.png filter=lfs diff=lfs merge=lfs -text
 *.svg filter=lfs diff=lfs merge=lfs -text
 *.mp4 filter=lfs diff=lfs merge=lfs -text
