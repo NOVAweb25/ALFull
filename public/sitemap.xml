@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset 
+  xmlns="https://www.alfull.net/schemas/sitemap/0.9"> 
+
+  <!-- الصفحة الرئيسية -->
+  <url>
+    <loc>https://www.alfull.net/</loc>
+    <priority>1.0</priority>
+  </url>
+
+  <!-- الصفحات العامة -->
+  <url><loc>https://www.alfull.net/home</loc></url>
+  <url><loc>https://www.alfull.net/about</loc></url>
+  <url><loc>https://www.alfull.net/contact</loc></url>
+  <url><loc>https://www.alfull.net/lable</loc></url>
+  <url><loc>https://www.alfull.net/projects</loc></url> 
+  <url><loc>https://www.alfull.net/Values</loc></url>
+  <url><loc>https://www.alfull.net/Vision</loc></url>
+  <url><loc>https://www.alfull.net/VisionValues</loc></url>
+   
+
+  <!-- صفحات المشاريع -->
+  <url><loc>https://www.alfull.net/projects/completed</loc></url>
+  <url><loc>https://www.alfull.net/projects/current</loc></url>
+
+</urlset>
