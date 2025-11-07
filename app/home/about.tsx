@@ -1,7 +1,7 @@
 "use client";
 import { motion } from "framer-motion";
 import Image from "next/image";
-import logo from "@/./public/logo.svg";
+import logo from "@/./public/logo.png";
 import React from "react";
 
 export default function AboutSection() {
