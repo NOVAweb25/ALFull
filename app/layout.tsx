@@ -10,7 +10,7 @@ import { getCookie, setCookie } from "cookies-next";
 import "./globals.css";
 
 // 🖼️ استيراد الصور من public
-import logo from "@/./public/logo.svg";
+import logo from "@/./public/logo.png";
 import iconMail from "@/./public/mail.svg";
 import iconPhone from "@/./public/phone.svg";
 import iconWhatsapp from "@/./public/whatsapp.svg";
