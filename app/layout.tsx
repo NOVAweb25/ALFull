@@ -9,12 +9,6 @@ import Image from "next/image";
 import { getCookie, setCookie } from "cookies-next";
 import "./globals.css";
 
-// 🖼️ استيراد الصور من public
-import logo from "@/./public/logo.png";
-import iconMail from "@/./public/mail.svg";
-import iconPhone from "@/./public/phone.svg";
-import iconWhatsapp from "@/./public/whatsapp.svg";
-
 // -----------------------------
 // Helper: navigation labels (AR + EN)
 // -----------------------------
@@ -90,7 +84,13 @@ export function Navbar({
 
         {/* الشعار */}
         <div className="flex-1 flex items-center justify-center pointer-events-none md:pointer-events-auto">
-          <Image src={logo} alt="Alfull logo" className="w-12 h-12 md:w-14 md:h-14 object-contain" />
+          <Image 
+  src="/logo.png" 
+  alt="Alfull logo" 
+  width={56} 
+  height={56} 
+  className="w-12 h-12 md:w-14 md:h-14 object-contain" 
+/>
         </div>
 
         {/* زر اللغة + قائمة الجوال */}
@@ -186,11 +186,13 @@ export function Footer({ lang }: { lang: "ar" | "en" }) {
         </div>
 
         <div className="flex flex-col items-center md:items-end md:text-right">
-          <Image
-            src={logo}
-            alt="Alfull logo"
-            className="w-20 h-20 object-contain"
-          />
+         <Image
+  src="/logo.png"
+  alt="Alfull logo"
+  width={80}
+  height={80}
+  className="w-20 h-20 object-contain"
+/>
           <p className="max-w-sm text-sm text-white/70">{lang === 'ar' ? 'معتمدة بالتصنيف الرابع ومطوّر عقاري رسمي من وزارة الإسكان، بخبرة تفوق 30 عاماً في مشاريع المقاولات والبنية التحتية والتطوير العقاري.' : 'A contracting and real estate development company experienced in residential and commercial projects.'}</p>
           <div className="w-20 h-[2px] bg-gradient-to-r from-[#FDB81C] to-[#FFD166] my-4" />
           <div className="text-xs text-white/50">{lang === 'ar' ? 'الرقم الضريبي: 314157857600003' : 'Tax ID: 314157857600003'}</div>
@@ -246,10 +248,12 @@ export function FloatingLogo({ lang }: { lang: "ar" | "en" }) {
 
               {!open ? (
                 <Image
-                  src={logo}
-                  alt="Alfull logo"
-                  className="w-10 h-10 object-contain relative z-10"
-                />
+  src="/logo.png"
+  alt="Alfull logo"
+  width={40}
+  height={40}
+  className="w-10 h-10 object-contain relative z-10"
+/>
               ) : (
                 <svg
                   width="28"
@@ -295,7 +299,7 @@ export function FloatingLogo({ lang }: { lang: "ar" | "en" }) {
                       className="transition hover:-translate-y-1"
                     >
                       
-    <Image
+   <Image
       src={icon.src}
       alt={icon.alt}
       width={44}

@@ -1,7 +1,7 @@
 "use client";
 import { motion } from "framer-motion";
 import Image from "next/image";
-import logo from "@/./public/logo.png";
+
 import React from "react";
 
 export default function AboutSection() {
@@ -34,11 +34,13 @@ export default function AboutSection() {
     <h2 className="text-gradient text-4xl md:text-5xl font-bold text-right">
       نبذة عنا
     </h2>
-    <Image
-      src={logo}
-      alt="Alfull Logo"
-      className="w-16 h-16 object-contain"
-    />
+   <Image
+  src="/logo.png"
+  alt="Alfull Logo"
+  width={64}
+  height={64}
+  className="w-16 h-16 object-contain"
+/>
   </motion.div>
 
         {/* الشريط الزجاجي */}
