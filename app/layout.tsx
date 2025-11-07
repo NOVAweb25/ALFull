@@ -280,14 +280,11 @@ export function FloatingLogo({ lang }: { lang: "ar" | "en" }) {
                   className="absolute bottom-24 flex flex-col items-center gap-4"
                 >
                   {[
-                    {
-                      href: "tel:+966505304806", // يفتح تطبيق الاتصال مباشرة
-                      src: iconPhone,
-                      alt: "Call",
-                    },
-                    { href: "mailto:office@alful.net", src: iconMail, alt: "Email" },
-                    { href: "https://wa.me/966505304806", src: iconWhatsapp, alt: "WhatsApp" },
-                  ].map((icon, i) => (
+  { href: "tel:+966505304806", src: "/phone.svg", alt: "Call" },
+  { href: "mailto:office@alful.net", src: "/mail.svg", alt: "Email" },
+  { href: "https://wa.me/966505304806", src: "/whatsapp.svg", alt: "WhatsApp" },
+].map((icon, i) => (
+  
                     <motion.a
                       key={`icon-${i}-${lang}`}
                       href={icon.href}
@@ -297,13 +294,16 @@ export function FloatingLogo({ lang }: { lang: "ar" | "en" }) {
                       variants={itemVariants}
                       className="transition hover:-translate-y-1"
                     >
-                      <Image
-                        src={icon.src}
-                        alt={icon.alt}
-                        className="w-11 h-11 object-contain"
-                      />
-                    </motion.a>
-                  ))}
+                      
+    <Image
+      src={icon.src}
+      alt={icon.alt}
+      width={44}
+      height={44}
+      className="w-11 h-11 object-contain"
+    />
+  </motion.a>
+))}
                 </motion.div>
               )}
             </AnimatePresence>
