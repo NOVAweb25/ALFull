@@ -26,9 +26,9 @@ const projects = [
 ];
 
 export default function CurrentProjects() {
-  const handleMapClick = (link) => {
-    window.open(link, "_blank");
-  };
+  const handleMapClick = (link: string | URL) => {
+  window.open(link, "_blank");
+};
 
   return (
     <section className="min-h-screen bg-[#121921] py-12 md:py-16 px-4 sm:px-6 lg:px-12">
